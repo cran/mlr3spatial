@@ -1,7 +1,7 @@
-66b0c37bc48333f3d85f3acb6e709349 *DESCRIPTION
+e87bfad584d2752948af6184c838b5cf *DESCRIPTION
 3be0c61ff28081487e97a120a4098dcc *NAMESPACE
-a83a0ea249794fae2317c759c5026602 *NEWS.md
-0fe10050e063991f78f83a3bb73870a2 *R/DataBackendRaster.R
+2dd713c1616e7cc9834e0c2f9d7db520 *NEWS.md
+1439615005a2424cfc1bffd32bb3c5c5 *R/DataBackendRaster.R
 83c2b3eac3756d609490b8e4e20b8731 *R/DataBackendVector.R
 0aaaa81edff530b1bfd7eda273c4bea9 *R/data.R
 b03c0065198ac0b55abea2e87aeb171b *R/helper.R
@@ -9,12 +9,12 @@ b03c0065198ac0b55abea2e87aeb171b *R/helper.R
 a88a283633c0712356788b19437d0fac *R/zzz.R
 65dcb76ffe0b9e9494092efefbbe53f8 *README.md
 7118aded074dc1351ee35cc1239d5ff4 *build/vignette.rds
-706d2d450ebcb85b4060f29b6eaacd31 *inst/WORDLIST
+bb5505ddbefe6b5dddb3b75e87ab8bb5 *inst/WORDLIST
 a2cf972145d89a301e5e06e77ffaa167 *inst/doc/benchmark.Rmd
 ed3ed298d85526396f35f543a9e37be3 *inst/doc/benchmark.html
 9ec2488c97cf72b98420996ad3e7497a *inst/doc/mlr3spatial.R
 fd8694ff11af37d0174d75ad88b5229c *inst/doc/mlr3spatial.Rmd
-e40a154a10abf8fa7a443594302d6484 *inst/doc/mlr3spatial.html
+a516c3cc7ca97edfb12215af8e27ab51 *inst/doc/mlr3spatial.html
 d28caa72632decb4c7bf24158725b812 *man/DataBackendRaster.Rd
 2b1984df1e31f7dc8427a437cea46558 *man/DataBackendVector.Rd
 c5ade697a51e64b1772d4ec4fd63be79 *man/as_data_backend.Rd
@@ -22,7 +22,7 @@ c5ade697a51e64b1772d4ec4fd63be79 *man/as_data_backend.Rd
 d0b21401e57b34c87ff379457e1386f0 *man/demo_raster.Rd
 d5c4ede69985f289f052f4f07cdd2549 *man/demo_stack_rasterbrick.Rd
 f52314e081d388290aba3fca7a5da3f6 *man/demo_stack_spatraster.Rd
-167379f3fb77bdc074bf6742078b3ed8 *man/mlr3spatial-package.Rd
+b0697973374b89b45f1f68a96a75e193 *man/mlr3spatial-package.Rd
 7404529dcb4a8df77d5df7b4d25c0749 *man/predict_spatial.Rd
 4e2e34908b554a068f582d0b9fedfba7 *man/write_raster.Rd
 cfc56b96f189b94eeba8e7b75e9a5091 *tests/testthat.R
@@ -32,7 +32,7 @@ c3897159e5120dfe1ab22d9d1dc87429 *tests/testthat/setup-autotuner.R
 a2e853113215961e881c919c420daa82 *tests/testthat/setup-backends.R
 60c02ce35ccfea1d6b6df100dc458cb7 *tests/testthat/setup-options.R
 770ef828068b527688a6f7ecfbb5b49e *tests/testthat/teardown.R
-3ecc83fc9c58b57d38a5628e183656ea *tests/testthat/test-DataBackendRaster.R
+0362f175f61913c01f54e13fce9e56b0 *tests/testthat/test-DataBackendRaster.R
 adcc0718f9dd3308bdac17502a1b7b50 *tests/testthat/test-DataBackendVector.R
 274d6948e32fefcef7c9ec79e773cd70 *tests/testthat/test-autotuner.R
 de600fba74c1bbac898e4eb6be5c33cb *tests/testthat/test-predict_spatial.R
