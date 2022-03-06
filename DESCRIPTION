@@ -1,7 +1,6 @@
 Package: mlr3spatial
 Title: Support for Spatial Objects Within the 'mlr3' Ecosystem
-Version: 0.1.1
-Date: 2022-01-04
+Version: 0.1.2
 Authors@R: 
     c(person(given = "Marc",
              family = "Becker",
@@ -32,9 +31,9 @@ Config/testthat/parallel: false
 Encoding: UTF-8
 RoxygenNote: 7.1.2
 NeedsCompilation: no
-Packaged: 2022-01-20 11:35:07 UTC; marc
+Packaged: 2022-03-06 18:35:34 UTC; marc
 Author: Marc Becker [aut, cre] (<https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (<https://orcid.org/0000-0003-0748-6624>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2022-01-20 15:02:42 UTC
+Date/Publication: 2022-03-06 18:50:02 UTC

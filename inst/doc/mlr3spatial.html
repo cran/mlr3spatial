@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -365,33 +366,35 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>Data Preparation</h3>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mlr3&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">library</span>(<span class="st">&quot;mlr3spatial&quot;</span>)</span></code></pre></div>
-<p>First, the TIFF files is read via <code>stars::read_stars()</code> and put into a <code>DataBackendRaster</code>. The DataBackend is then used to create a regression task with the response being <code>layer.1</code>.</p>
+<p>First, the TIFF files is read via <code>stars::read_stars()</code> and put into a <code>DataBackendRaster</code>. The DataBackend is then used to create a regression task with the response being <code>band1</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>tif =<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;tif/L7_ETMs.tif&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;stars&quot;</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>stack =<span class="st"> </span>stars<span class="op">::</span><span class="kw">read_stars</span>(tif)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>backend =<span class="st"> </span><span class="kw">as_data_backend</span>(stack)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>task =<span class="st"> </span><span class="kw">as_task_regr</span>(backend, <span class="dt">target =</span> <span class="st">&quot;layer.1&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>task =<span class="st"> </span><span class="kw">as_task_regr</span>(backend, <span class="dt">target =</span> <span class="st">&quot;band1&quot;</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="kw">print</span>(task)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="co">#&gt; &lt;TaskRegr:backend&gt; (122848 x 6)</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">#&gt; * Target: layer.1</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">#&gt; * Target: band1</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="co">#&gt; * Properties: -</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="co">#&gt; * Features (5):</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="co">#&gt;   - dbl (5): layer.2, layer.3, layer.4, layer.5, layer.6</span></span></code></pre></div>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="co">#&gt;   - dbl (5): band2, band3, band4, band5, band6</span></span></code></pre></div>
 <p>For large raster files with millions of values it helps to predict in parallel. To enable this, set <code>learner$parallel_predict = TRUE</code> and initiate a parallel plan via {future}. Since this is only an example, parallelization is not enabled here. Here we will use a simple regression tree as an example learner. In practice you might want to use a different learner - you can find an overview of available learners <a href="https://mlr3extralearners.mlr-org.com/articles/learners/list_learners.html">here</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>row_ids =<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span>task<span class="op">$</span>nrow, <span class="dv">500</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>learner<span class="op">$</span><span class="kw">train</span>(task, <span class="dt">row_ids =</span> row_ids)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="kw">print</span>(learner)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">#&gt; &lt;LearnerRegrRpart:regr.rpart&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="co">#&gt; * Model: rpart</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="co">#&gt; * Parameters: xval=0</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="co">#&gt; * Packages: mlr3, rpart</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="co">#&gt; * Predict Type: response</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a><span class="co">#&gt; * Feature types: logical, integer, numeric, factor, ordered</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="co">#&gt; * Properties: importance, missings, selected_features, weights</span></span></code></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.382] 253 </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.431] 253</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="kw">print</span>(learner)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="co">#&gt; &lt;LearnerRegrRpart:regr.rpart&gt;: Regression Tree</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="co">#&gt; * Model: rpart</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="co">#&gt; * Parameters: xval=0</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a><span class="co">#&gt; * Packages: mlr3, rpart</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="co">#&gt; * Predict Type: response</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="co">#&gt; * Feature types: logical, integer, numeric, factor, ordered</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="co">#&gt; * Properties: importance, missings, selected_features, weights</span></span></code></pre></div>
 </div>
 <div id="prediction" class="section level3">
 <h3>Prediction</h3>
@@ -400,50 +403,53 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="mlr3spatial" class="section level4">
 <h4>mlr3spatial</h4>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>ras =<span class="st"> </span><span class="kw">predict_spatial</span>(task, learner, <span class="dt">format =</span> <span class="st">&quot;stars&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">#&gt; INFO  [12:35:05.176] Start raster prediction </span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">#&gt; INFO  [12:35:05.208] Prediction is executed with a chunksize of 200, 1 chunk(s) in total, 122848 values per chunk </span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co">#&gt; INFO  [12:35:05.771] Chunk 1 of 1 finished </span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">#&gt; INFO  [12:35:05.784] Finished raster prediction in 0 seconds</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="kw">names</span>(ras) =<span class="st"> &quot;cadmium&quot;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">print</span>(ras)</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">#&gt; stars object with 2 dimensions and 1 attribute</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="co">#&gt; attribute(s):</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">#&gt;             Min.  1st Qu.   Median     Mean 3rd Qu.     Max.</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">#&gt; cadmium  62.3629 70.30233 77.01695 79.05135 89.2809 118.1429</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="co">#&gt; dimension(s):</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">#&gt;   from  to  offset delta                     refsys point values x/y</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">#&gt; x    1 349  288776  28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [x]</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="co">#&gt; y    1 352 9120761 -28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [y]</span></span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.729] Start raster prediction </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.734] Prediction is executed with a chunksize of 200, 1 chunk(s) in total, 122848 values per chunk </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.791] 220 </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.989] 219 </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:32.995] Chunk 1 of 1 finished </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:33.006] Finished raster prediction in 0 seconds</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="kw">names</span>(ras) =<span class="st"> &quot;cadmium&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="kw">print</span>(ras)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="co">#&gt; stars object with 2 dimensions and 1 attribute</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="co">#&gt; attribute(s):</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="co">#&gt;             Min.  1st Qu.   Median     Mean 3rd Qu.     Max.</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="co">#&gt; cadmium  62.3629 70.30233 77.01695 79.05135 89.2809 118.1429</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a><span class="co">#&gt; dimension(s):</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a><span class="co">#&gt;   from  to  offset delta                     refsys point values x/y</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a><span class="co">#&gt; x    1 349  288776  28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [x]</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a><span class="co">#&gt; y    1 352 9120761 -28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [y]</span></span></code></pre></div>
 </div>
 <div id="stars" class="section level4">
 <h4>stars</h4>
 <p>Since the layers are merged in a {stars} object, one first need to split them up and convert them into a regular data.table. Next, the column names need to be adjusted to match the ones of the training data. Afterwards, the <code>data.frame</code> generic of <code>predict()</code> can be called. Finally, the predictions need to be injected into a stars object again.</p>
 <p>(All of these steps are happening internally in {mlr3spatial}).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>rpart_learner =<span class="st"> </span>rpart<span class="op">::</span><span class="kw">rpart</span>(layer<span class="fl">.1</span> <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> task<span class="op">$</span><span class="kw">data</span>(<span class="dt">rows =</span> row_ids))</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>stars_stack =<span class="st"> </span><span class="kw">as.data.table</span>(<span class="kw">split</span>(stack, <span class="st">&quot;band&quot;</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>stars_stack[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;X1&quot;</span>)] =<span class="st"> </span><span class="ot">NULL</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">colnames</span>(stars_stack) =<span class="st"> </span>task<span class="op">$</span>feature_names</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>stars_pred =<span class="st"> </span><span class="kw">predict</span>(rpart_learner, stars_stack)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a><span class="co"># subset stars object to one band only</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>stars_pred_ras =<span class="st"> </span>stack[, , , <span class="dv">1</span>]</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a><span class="co"># rename the layer name</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="kw">names</span>(stars_pred_ras) =<span class="st"> &quot;pred&quot;</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="co"># assign predictions</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>stars_pred_ras<span class="op">$</span>pred =<span class="st"> </span>stars_pred</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a><span class="kw">print</span>(stars_pred_ras)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="co">#&gt; stars object with 3 dimensions and 1 attribute</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a><span class="co">#&gt; attribute(s):</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a><span class="co">#&gt;          Min.  1st Qu.   Median     Mean 3rd Qu.     Max.</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a><span class="co">#&gt; pred  62.3629 70.30233 77.01695 79.05135 89.2809 118.1429</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a><span class="co">#&gt; dimension(s):</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a><span class="co">#&gt;      from  to  offset delta                     refsys point values x/y</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a><span class="co">#&gt; x       1 349  288776  28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [x]</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a><span class="co">#&gt; y       1 352 9120761 -28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [y]</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true"></a><span class="co">#&gt; band    1   1      NA    NA                         NA    NA   NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>rpart_learner =<span class="st"> </span>rpart<span class="op">::</span><span class="kw">rpart</span>(band1 <span class="op">~</span><span class="st"> </span>., <span class="dt">data =</span> task<span class="op">$</span><span class="kw">data</span>(<span class="dt">rows =</span> row_ids))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="co">#&gt; INFO  [19:35:33.171] 216</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>stars_stack =<span class="st"> </span><span class="kw">as.data.table</span>(<span class="kw">split</span>(stack, <span class="st">&quot;band&quot;</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>stars_stack[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;X1&quot;</span>)] =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">colnames</span>(stars_stack) =<span class="st"> </span>task<span class="op">$</span>feature_names</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>stars_pred =<span class="st"> </span><span class="kw">predict</span>(rpart_learner, stars_stack)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a><span class="co"># subset stars object to one band only</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>stars_pred_ras =<span class="st"> </span>stack[, , , <span class="dv">1</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a><span class="co"># rename the layer name</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a><span class="kw">names</span>(stars_pred_ras) =<span class="st"> &quot;pred&quot;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="co"># assign predictions</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>stars_pred_ras<span class="op">$</span>pred =<span class="st"> </span>stars_pred</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a><span class="kw">print</span>(stars_pred_ras)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a><span class="co">#&gt; stars object with 3 dimensions and 1 attribute</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a><span class="co">#&gt; attribute(s):</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a><span class="co">#&gt;          Min.  1st Qu.   Median     Mean 3rd Qu.     Max.</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a><span class="co">#&gt; pred  62.3629 70.30233 77.01695 79.05135 89.2809 118.1429</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a><span class="co">#&gt; dimension(s):</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a><span class="co">#&gt;      from  to  offset delta                     refsys point values x/y</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a><span class="co">#&gt; x       1 349  288776  28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [x]</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true"></a><span class="co">#&gt; y       1 352 9120761 -28.5 SIRGAS 2000 / UTM zone 25S FALSE   NULL [y]</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true"></a><span class="co">#&gt; band    1   1      NA    NA                         NA    NA   NULL</span></span></code></pre></div>
 </div>
 </div>
 <div id="output-consistency" class="section level3">

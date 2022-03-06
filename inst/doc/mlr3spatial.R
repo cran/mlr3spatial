@@ -14,7 +14,7 @@ tif = system.file("tif/L7_ETMs.tif", package = "stars")
 stack = stars::read_stars(tif)
 
 backend = as_data_backend(stack)
-task = as_task_regr(backend, target = "layer.1")
+task = as_task_regr(backend, target = "band1")
 
 print(task)
 
@@ -33,7 +33,7 @@ names(ras) = "cadmium"
 print(ras)
 
 ## -----------------------------------------------------------------------------
-rpart_learner = rpart::rpart(layer.1 ~ ., data = task$data(rows = row_ids))
+rpart_learner = rpart::rpart(band1 ~ ., data = task$data(rows = row_ids))
 stars_stack = as.data.table(split(stack, "band"))
 stars_stack[, c("x", "y", "X1")] = NULL
 colnames(stars_stack) = task$feature_names
