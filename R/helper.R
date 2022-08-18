@@ -16,8 +16,8 @@ write_raster = function(data) {
   # write values in chunks
   mlr3misc::pmap(list(bs$cells_seq, bs$cells_to_read), function(row, nrows) {
     terra::writeValues(target_raster,
-      data[1:(terra::rowFromCell(target_raster, row) + terra::rowFromCell(target_raster, nrows) - 1),
-        1:terra::nrow(data)], terra::rowFromCell(target_raster, row), terra::rowFromCell(target_raster, nrows))
+      data[seq_len((terra::rowFromCell(target_raster, row)) + terra::rowFromCell(target_raster, nrows) - 1),
+        seq_len(terra::nrow(data))], terra::rowFromCell(target_raster, row), terra::rowFromCell(target_raster, nrows))
   })
   terra::writeStop(target_raster)
   terra::rast(filename)
@@ -42,15 +42,25 @@ block_size = function(raster, chunksize) {
   # row_size in bites; one cell takes 8 byte memory
   row_size = terra::ncol(raster) * terra::nlyr(raster) * 8
   # Hom many rows can be processed in one block?
-  nrow_block = chunksize / row_size
+  nrow_block = ceiling(chunksize / row_size)
   # How many cells are this?
   ncells_block = nrow_block * terra::ncol(raster)
   # split all cells by ncells_block
   cells_seq = seq(1, terra::ncell(raster), by = ncells_block)
   # number of rows to read per block
   cells_to_read = rep(ncells_block, length(cells_seq))
-
+  # adapt last write
   cells_to_read[length(cells_to_read)] = terra::ncell(raster) - cells_seq[length(cells_seq)] + 1
 
   return(list(cells_seq = cells_seq, cells_to_read = cells_to_read))
+}
+
+allow_partial_matching = list(
+  warnPartialMatchArgs = FALSE,
+  warnPartialMatchAttr = FALSE,
+  warnPartialMatchDollar = FALSE
+)
+
+catn = function(..., file = "") {
+  cat(paste0(..., collapse = "\n"), "\n", sep = "", file = file)
 }
