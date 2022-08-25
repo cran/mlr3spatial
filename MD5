@@ -1,6 +1,6 @@
-b61481d27ff4af6244cffa185e9adbfb *DESCRIPTION
+312bd0f476e8bad534e9a887ffa276ce *DESCRIPTION
 64cace35ab98fe658ca18769b61bbeeb *NAMESPACE
-0470cf1d4808fc5d1b7fa15bc020e5c1 *NEWS.md
+ab780e4e4927a91ab2b272bff3b32e54 *NEWS.md
 5ba17c7aa9d13cc15bf8c259e07ab82a *R/DataBackendRaster.R
 7bc4dc10076decc98e71e2b2df242f7b *R/LearnerClassifSpatial.R
 ffefec28b5262fa330c8a756b1321564 *R/LearnerRegrSpatial.R
@@ -13,9 +13,9 @@ f16d3dda536fbbdae472616f797b85fd *R/as_task_unsupervised.R
 332841e45c2d851b4698fbc044b19c93 *R/data.R
 16d34f0e1f5267817c1328ab1df3d8b1 *R/helper.R
 05f22f8ee0c4c570a5259974e9351642 *R/predict_spatial.R
-db1236f316e997450b2eac8356a9b9ff *R/zzz.R
+e403c1431d93ee717e54d3bc896996cb *R/zzz.R
 e90ecdd4009a8eefab6cd0b098956af5 *README.md
-4f2efb5f8b7059352e60bb7d3c038182 *data/leipzig.rda
+8ae23e4118f7ee41fc7fd88b0789cf10 *data/leipzig.rda
 70ec69c908c4562bf0b51cb5b8148b9a *inst/WORDLIST
 3460a1a0d3beb4b99ea6866481b3a0c2 *inst/extdata/leipzig_points.gpkg
 db708b7ae1d5593225878535c512633e *inst/extdata/leipzig_raster.tif
@@ -53,4 +53,4 @@ d86333b9ba244c0d06ab3a8813f0a71f *tests/testthat/test_TaskRegrST.R
 c45c0f1437f8cf605f1b8bfdb09db75c *tests/testthat/test_as_task_unsupervised.R
 3c1b0bd0a8bdafd95e1a26c90b3e8c4f *tests/testthat/test_bock_size.R
 931e74182740308e7ecddf596d8a66e5 *tests/testthat/test_data.R
-97d5331eb4ba71da28c84cd08207ecdf *tests/testthat/test_predict_spatial.R
+8da45ecbea01df07e1dcca8140cae4fc *tests/testthat/test_predict_spatial.R
