@@ -1,7 +1,7 @@
 Package: mlr3spatial
 Title: Support for Spatial Objects Within the 'mlr3' Ecosystem
-Version: 0.3.1
-Date: 2022-12-16
+Version: 0.4.0
+Date: 2023-02-23
 Authors@R: 
     c(
      person("Marc", "Becker", , "marcbecker@posteo.de", role = c("aut", "cre"),
@@ -28,7 +28,7 @@ Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Collate: 'DataBackendRaster.R' 'DataBackendVector.R'
         'LearnerClassifSpatial.R' 'LearnerRegrSpatial.R' 'TaskRegrST.R'
         'TaskClassifST.R' 'TaskClassif_leipzig.R'
@@ -36,9 +36,9 @@ Collate: 'DataBackendRaster.R' 'DataBackendVector.R'
         'as_task_unsupervised.R' 'data.R' 'helper.R'
         'predict_spatial.R' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2022-12-16 11:40:03 UTC; marc
+Packaged: 2023-02-27 15:11:15 UTC; marc
 Author: Marc Becker [aut, cre] (<https://orcid.org/0000-0002-8115-0400>),
   Patrick Schratz [aut] (<https://orcid.org/0000-0003-0748-6624>)
 Maintainer: Marc Becker <marcbecker@posteo.de>
 Repository: CRAN
-Date/Publication: 2022-12-16 12:10:07 UTC
+Date/Publication: 2023-02-27 16:02:29 UTC
