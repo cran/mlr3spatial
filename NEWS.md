@@ -1,3 +1,7 @@
+# mlr3spatial 0.4.1
+
+* refactor: Use the `terra::inMemory()` function instead of `@ptr`.
+
 # mlr3spatial 0.4.0
 
 * refactor: The data input of `spatial_predict()` accepts `SpatRaster`, `stars` `sf` `RasterStack` and `RasterBrick` objects now.

@@ -1,7 +1,7 @@
-b30bdb3be907fe849c12ee79cd21e2f4 *DESCRIPTION
+32ab944ff81bf4bd474aa59dab9a5d80 *DESCRIPTION
 60a240c2f1381ebe76ac097f92dbad97 *NAMESPACE
-cf07b0ec8eb233244953233557dec213 *NEWS.md
-bea2785e914498fb89c3314bb1f6fc5a *R/DataBackendRaster.R
+de923e60e4fe0f40606cdb5d6257ca5c *NEWS.md
+9317c3e207eed6308f39244f96111f1d *R/DataBackendRaster.R
 8ca9e569aa0c5f15bb5aaec56f603045 *R/DataBackendVector.R
 7bc4dc10076decc98e71e2b2df242f7b *R/LearnerClassifSpatial.R
 ffefec28b5262fa330c8a756b1321564 *R/LearnerRegrSpatial.R
@@ -14,9 +14,9 @@ c0e73b5bb9474f437303b66245f41605 *R/as_task_unsupervised.R
 2113a800ef0f8a728a7bee0256a65af6 *R/data.R
 42065909ac363059c8582f25ccc5bf9c *R/helper.R
 c06078d561e55a81ca04a185fd27fa42 *R/predict_spatial.R
-e403c1431d93ee717e54d3bc896996cb *R/zzz.R
+380a08ff68eb3da56f2e0942f03065a3 *R/zzz.R
 48e48f03d0f62afe7a91f9bb5ae0934f *README.md
-8743dc12a38bccb7770c110d7d4fb275 *build/vignette.rds
+2159a9c07dc0c8ff183ce5ffe946741e *build/vignette.rds
 8ae23e4118f7ee41fc7fd88b0789cf10 *data/leipzig.rda
 3fdd84f60f0a68ce1db6477286bea6fe *inst/WORDLIST
 7487ceb2b073c0fda38b3079c298296d *inst/doc/benchmark.Rmd
@@ -49,7 +49,7 @@ fbad9b3f93ae39a68570421bc6d6d88b *tests/testthat/helper_future.R
 321c4a36f4cb2e413873520924fcefae *tests/testthat/helper_learner.R
 635a5436d24106692d689015d3573c2f *tests/testthat/setup.R
 3c7faa5055965cbee395d5ffca4f51f7 *tests/testthat/teardown.R
-ebffc5398b39d8e34b734b8941490643 *tests/testthat/test_DataBackendRaster.R
+4cd31ff3429c83db6a40eb1741415ac4 *tests/testthat/test_DataBackendRaster.R
 ca02e3935780a4bb2971b27cdb979ef1 *tests/testthat/test_DataBackendVector.R
 11374e0d5313ad299158ef431756cba8 *tests/testthat/test_LearnerClassifSpatial.R
 b12b107e6b2c1f920a4434dc2293b575 *tests/testthat/test_LearnerRegrSpatial.R
