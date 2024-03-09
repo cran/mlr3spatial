@@ -1,6 +1,6 @@
-32ab944ff81bf4bd474aa59dab9a5d80 *DESCRIPTION
+c31a1b4f98a4209d82a4d8c8ef220c6e *DESCRIPTION
 60a240c2f1381ebe76ac097f92dbad97 *NAMESPACE
-de923e60e4fe0f40606cdb5d6257ca5c *NEWS.md
+2cf6001756e291c0970e586f4e774797 *NEWS.md
 9317c3e207eed6308f39244f96111f1d *R/DataBackendRaster.R
 8ca9e569aa0c5f15bb5aaec56f603045 *R/DataBackendVector.R
 7bc4dc10076decc98e71e2b2df242f7b *R/LearnerClassifSpatial.R
@@ -15,12 +15,12 @@ c0e73b5bb9474f437303b66245f41605 *R/as_task_unsupervised.R
 42065909ac363059c8582f25ccc5bf9c *R/helper.R
 c06078d561e55a81ca04a185fd27fa42 *R/predict_spatial.R
 380a08ff68eb3da56f2e0942f03065a3 *R/zzz.R
-48e48f03d0f62afe7a91f9bb5ae0934f *README.md
-2159a9c07dc0c8ff183ce5ffe946741e *build/vignette.rds
+bd63f35083fb72584eddc44182e89c77 *README.md
+5fb8fe108828fcfb735a351af6f5fc65 *build/vignette.rds
 8ae23e4118f7ee41fc7fd88b0789cf10 *data/leipzig.rda
 3fdd84f60f0a68ce1db6477286bea6fe *inst/WORDLIST
 7487ceb2b073c0fda38b3079c298296d *inst/doc/benchmark.Rmd
-08dd4c031900a0c73249b3da61f7a050 *inst/doc/benchmark.html
+67baac0f2e0646796b701dd5e7fa7cd6 *inst/doc/benchmark.html
 3460a1a0d3beb4b99ea6866481b3a0c2 *inst/extdata/leipzig_points.gpkg
 db708b7ae1d5593225878535c512633e *inst/extdata/leipzig_raster.tif
 1dfe10d7a28a2fc81fede50e77db62b7 *man/DataBackendRaster.Rd
@@ -38,7 +38,7 @@ af469fe098cf48adda7824d26d909eb8 *man/factor_layer.Rd
 e3021f474b7d1e099ae764e969dabe57 *man/generate_stack.Rd
 4ea5b6e11e6d32bcbec46ebbf4496cd9 *man/leipzig.Rd
 5ca136c85da206628ad95321d3172e32 *man/mask_stack.Rd
-04ae8596003438cfabef406291533499 *man/mlr3spatial-package.Rd
+550f72f5f52a0ff572442ca4df2a9450 *man/mlr3spatial-package.Rd
 643b74276b80e2ba26b180d34dcb9608 *man/numeric_layer.Rd
 0125935665bc2bae8cd6023bf3294319 *man/predict_spatial.Rd
 c689b54da7e35c618d31679382f43e12 *man/sample_stack.Rd
