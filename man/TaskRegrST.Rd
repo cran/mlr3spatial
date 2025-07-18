@@ -4,7 +4,7 @@
 \alias{TaskRegrST}
 \title{Spatiotemporal Regression Task}
 \description{
-This task specializes \link{TaskRegr} for spatiotemporal regression problems.
+This task specializes \link[mlr3:TaskRegr]{mlr3::TaskRegr} for spatiotemporal regression problems.
 
 A spatial example task is available via \code{tsk("cookfarm_mlr3")}.
 
@@ -44,6 +44,7 @@ If \code{TRUE}, coordinates are used as features.}
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="add_strata"><a href='../../mlr3/html/Task.html#method-Task-add_strata'><code>mlr3::Task$add_strata()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="cbind"><a href='../../mlr3/html/Task.html#method-Task-cbind'><code>mlr3::Task$cbind()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="data"><a href='../../mlr3/html/Task.html#method-Task-data'><code>mlr3::Task$data()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="divide"><a href='../../mlr3/html/Task.html#method-Task-divide'><code>mlr3::Task$divide()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="droplevels"><a href='../../mlr3/html/Task.html#method-Task-droplevels'><code>mlr3::Task$droplevels()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="filter"><a href='../../mlr3/html/Task.html#method-Task-filter'><code>mlr3::Task$filter()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="mlr3" data-topic="Task" data-id="format"><a href='../../mlr3/html/Task.html#method-Task-format'><code>mlr3::Task$format()</code></a></span></li>
@@ -87,9 +88,9 @@ The function \code{\link[=as_task_regr_st]{as_task_regr_st()}} provides an alter
 \item{\code{id}}{(\code{character(1)})\cr
 Identifier for the new instance.}
 
-\item{\code{backend}}{(\link{DataBackend})\cr
-Either a \link{DataBackend}, or any object which is convertible to a \link{DataBackend} with \code{as_data_backend()}.
-E.g., am \code{sf} will be converted to a \link{DataBackendDataTable}.}
+\item{\code{backend}}{(\link[mlr3:DataBackend]{mlr3::DataBackend})\cr
+Either a \link[mlr3:DataBackend]{mlr3::DataBackend}, or any object which is convertible to a \link[mlr3:DataBackend]{mlr3::DataBackend} with \code{mlr3::as_data_backend()}.
+E.g., am \code{sf} will be converted to a \link[mlr3:DataBackendDataTable]{mlr3::DataBackendDataTable}.}
 
 \item{\code{target}}{(\code{character(1)})\cr
 Name of the target column.}
@@ -105,10 +106,11 @@ Coordinate reference system.
 WKT2 or EPSG string.}
 
 \item{\code{coords_as_features}}{(\code{logical(1)})\cr
-If \code{TRUE}, coordinates are used as features.}
+If \code{TRUE}, coordinates are used as features.
+This is a shortcut for \code{task$set_col_roles(c("x", "y"), role = "feature")} with the assumption that the coordinates in the data are named "x" and "y".}
 
 \item{\code{extra_args}}{(named \code{list()})\cr
-Named list of constructor arguments, required for converting task types via \code{\link[=convert_task]{convert_task()}}.}
+Named list of constructor arguments, required for converting task types via \code{\link[mlr3:convert_task]{mlr3::convert_task()}}.}
 }
 \if{html}{\out{</div>}}
 }

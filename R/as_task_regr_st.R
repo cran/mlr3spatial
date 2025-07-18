@@ -5,9 +5,9 @@
 #' This is a S3 generic, specialized for at least the following objects:
 #'
 #' 1. [TaskRegrST]: Ensure the identity.
-#' 2. [data.frame()] and [DataBackend]: Provides an alternative to the constructor of [TaskRegrST].
+#' 2. [data.frame()] and [mlr3::DataBackend]: Provides an alternative to the constructor of [TaskRegrST].
 #' 3. [sf::sf]: Extracts spatial meta data before construction.
-#' 4. [TaskClassif]: Calls [convert_task()].
+#' 4. [mlr3::TaskClassif]: Calls [mlr3::convert_task()].
 #'
 #' @inheritParams mlr3::as_task_regr
 #' @template param_coords_as_features
@@ -53,6 +53,10 @@ as_task_regr_st.sf = function(x, target = NULL, id = deparse(substitute(x)), coo
   geometries = as.character(unique(sf::st_geometry_type(x)))
   if (!test_names(geometries, identical.to = "POINT")) {
     stop("Simple feature may not contain geometries of type '%s'", str_collapse(setdiff(geometries, "POINT")))
+  }
+
+  if (any(c("X", "Y") %in% colnames(x))) {
+    stopf("Data contains columns named 'X' and 'Y' which are reserved for coordinates. The sf object might contain coordinates in the geometry column and the `X` and `Y` columns. Please remove or rename them before converting to a task.")
   }
 
   # extract spatial meta data

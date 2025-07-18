@@ -5,7 +5,7 @@
 #'
 #' @param newdata ([terra::SpatRaster] | `stars::stars` | [sf::sf] | `raster::RasterStack` | `raster::RasterBrick`).
 #'   New data to predict on. All spatial data formats convertible by `as_data_backend()` are supported e.g. [terra::SpatRaster] or [sf::sf].
-#' @param learner ([Learner]).
+#' @param learner ([mlr3::Learner]).
 #'   Learner with trained model.
 #' @template param-chunksize
 #' @param format (`character(1)`)\cr
@@ -75,7 +75,7 @@ predict_spatial = function(newdata, learner, chunksize = 200L, format = "terra",
     if (learner$task_type == "classif") {
       levels = learner$learner$state$train_task$levels()[[learner$learner$state$train_task$target_names]]
       value = data.table(ID = seq_along(levels), categories = levels)
-      target_raster = terra::categories(target_raster, value = value, index = 2)
+      target_raster = terra::categories(target_raster, value = value)
     }
     target_raster = set_names(target_raster, learner$learner$state$train_task$target_names)
 
