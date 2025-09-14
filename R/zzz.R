@@ -4,7 +4,7 @@
 #' @import mlr3
 #' @import sf
 #' @importFrom R6 R6Class is.R6
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases runif
 #' @importFrom utils getFromNamespace data
 #'
 #' @section Learn mlr3:
@@ -70,6 +70,9 @@
 
   x$default_measures$classif_st = "classif.ce"
   x$default_measures$regr_st = "regr.mse"
+
+  x$task_col_roles_optional_newdata$classif_st = c(x$task_col_roles_optional_newdata$classif, c("coordinate", "space", "time"))
+  x$task_col_roles_optional_newdata$regr_st = c(x$task_col_roles_optional_newdata$regr, c("coordinate", "space", "time"))
 
   # task
   x = getFromNamespace("mlr_tasks", ns = "mlr3")
