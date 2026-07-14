@@ -19,8 +19,8 @@
 \method{as_data_backend}{sf}(data, primary_key = NULL, keep_rownames = FALSE, ...)
 }
 \arguments{
-\item{data}{(\link[terra:SpatRaster-class]{terra::SpatRaster})\cr
-The input \link[terra:SpatRaster-class]{terra::SpatRaster}.}
+\item{data}{(\link[terra:SpatRaster]{terra::SpatRaster})\cr
+The input \link[terra:SpatRaster]{terra::SpatRaster}.}
 
 \item{primary_key}{(\code{character(1)} | \code{integer()})\cr
 Name of the primary key column, or integer vector of row ids.}
@@ -31,7 +31,8 @@ Not used.}
 \item{keep_rownames}{(\code{logical(1)} | \code{character(1)})\cr
 If \code{TRUE} or a single string, keeps the row names of \code{data} as a new column.
 The column is named like the provided string, defaulting to \code{"..rownames"} for \code{keep_rownames == TRUE}.
-Note that the created column will be used as a regular feature by the task unless you manually change the column role.
+Note that the created column will be used as a regular feature by the task
+unless you manually change the column role.
 Also see \code{\link[data.table:as.data.table]{data.table::as.data.table()}}.}
 }
 \value{

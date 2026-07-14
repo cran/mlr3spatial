@@ -43,9 +43,6 @@
 #' are relaxed, allowing non-ascii characters in column names. This is an
 #' experimental and temporal option to pave the way for text analysis, and will
 #' likely be removed in a future version of the package. analysis.
-#'
-#' @references
-#' `r tools::toRd(citation("mlr3spatial"))`
 "_PACKAGE"
 
 .onLoad = function(libname, pkgname) {
@@ -55,11 +52,14 @@
   x = getFromNamespace("mlr_reflections", ns = "mlr3")
 
   x$task_types = x$task_types[!c("regr_st", "classif_st")]
+  # nolint start
+  # fmt: skip
   x$task_types = setkeyv(rbind(x$task_types, rowwise_table(
-    ~type,        ~package,      ~task,            ~learner,             ~prediction,         ~prediction_data,         ~measure,
-    "regr_st",    "mlr3spatial", "TaskRegrST",     "LearnerRegr",        "PredictionRegr",    "PredictionDataRegr",     "MeasureRegr",
-    "classif_st", "mlr3spatial", "TaskClassifST",  "LearnerClassif",     "PredictionClassif", "PredictionDataClassif",  "MeasureClassif"
+    ~type,        ~package,      ~task,            ~learner,         ~prediction,         ~prediction_data,         ~measure,
+    "regr_st",    "mlr3spatial", "TaskRegrST",     "LearnerRegr",    "PredictionRegr",    "PredictionDataRegr",     "MeasureRegr",
+    "classif_st", "mlr3spatial", "TaskClassifST",  "LearnerClassif", "PredictionClassif", "PredictionDataClassif",  "MeasureClassif"
   )), "type")
+  # nolint end
 
   x$task_col_roles$classif_st = c(x$task_col_roles$classif, c("coordinate", "space", "time"))
   x$task_col_roles$regr_st = c(x$task_col_roles$regr, c("coordinate", "space", "time"))
@@ -71,8 +71,14 @@
   x$default_measures$classif_st = "classif.ce"
   x$default_measures$regr_st = "regr.mse"
 
-  x$task_col_roles_optional_newdata$classif_st = c(x$task_col_roles_optional_newdata$classif, c("coordinate", "space", "time"))
-  x$task_col_roles_optional_newdata$regr_st = c(x$task_col_roles_optional_newdata$regr, c("coordinate", "space", "time"))
+  x$task_col_roles_optional_newdata$classif_st = c(
+    x$task_col_roles_optional_newdata$classif,
+    c("coordinate", "space", "time")
+  )
+  x$task_col_roles_optional_newdata$regr_st = c(
+    x$task_col_roles_optional_newdata$regr,
+    c("coordinate", "space", "time")
+  )
 
   # task
   x = getFromNamespace("mlr_tasks", ns = "mlr3")
@@ -85,8 +91,8 @@
   }
 } # nocov end
 
-
-.onUnload = function(libpaths) { # nolint
+#nolint next
+.onUnload = function(libpaths) {
   mlr3::mlr_tasks$remove("leipzig")
 }
 

@@ -26,10 +26,11 @@
 #' @importFrom utils tail
 #' @importFrom methods as
 #' @export
-DataBackendRaster = R6Class("DataBackendRaster",
-  inherit = DataBackend, cloneable = FALSE,
+DataBackendRaster = R6Class(
+  "DataBackendRaster",
+  inherit = DataBackend,
+  cloneable = FALSE,
   public = list(
-
     #' @description
     #' Creates a new instance of this [R6][R6::R6Class] class.
     #'
@@ -38,19 +39,22 @@ DataBackendRaster = R6Class("DataBackendRaster",
     initialize = function(data) {
       assert_class(data, "SpatRaster")
 
-      # write raster to disk
-      sources = map_chr(names(data), function(layer) {
-        if (terra::inMemory(data[layer])) {
+      # record the source file and band index within that source for each layer
+      # in-memory layers are written to individual files that hold a single band
+      layers = map(seq_len(terra::nlyr(data)), function(i) {
+        layer = data[[i]]
+        if (terra::inMemory(layer)) {
           filename = tempfile(fileext = ".tif")
-          terra::writeRaster(data[layer], filename = filename)
+          terra::writeRaster(layer, filename = filename)
+          list(source = filename, band = 1L)
         } else {
-          filename = terra::sources(data[layer])
+          src = terra::sources(layer, bands = TRUE)
+          list(source = src$source, band = as.integer(src$bands))
         }
-        filename
       })
 
-      # stack
-      private$.data = unique(sources) # nolint
+      private$.sources = map_chr(layers, "source")
+      private$.bands = map_int(layers, "band")
       private$.categories = terra::cats(data)
       private$.layer_names = names(data)
       private$.crs = terra::crs(data)
@@ -69,14 +73,18 @@ DataBackendRaster = R6Class("DataBackendRaster",
     #' duplicated rows, duplicated column names lead to an exception.
     data = function(rows, cols) {
       stack = self$stack
-      if (is.null(rows)) rows = numeric(0)
+      if (is.null(rows)) {
+        rows = numeric(0)
+      }
       rows = assert_integerish(rows, coerce = TRUE, null.ok = TRUE)
       assert_names(cols, type = "unique")
       cols = intersect(cols, private$.layer_names)
 
       if (!length(cols)) {
         data.table()
-      } else if (length(rows) && test_integer(rows, sorted = TRUE, unique = TRUE, len = max(rows[length(rows)] - rows[1] + 1, 0))) {
+      } else if (
+        length(rows) && test_integer(rows, sorted = TRUE, unique = TRUE, len = max(rows[length(rows)] - rows[1] + 1, 0))
+      ) {
         # block read (e.g. c(1:10))
         terra::readStart(stack)
         on.exit(terra::readStop(stack))
@@ -102,7 +110,9 @@ DataBackendRaster = R6Class("DataBackendRaster",
     #' @return [data.table::data.table()] of the first `n` rows.
     head = function(n = 6L) {
       res = as.data.table(terra::head(self$stack, n))
-      if (length(private$.response)) set(res, j = private$.target_names, value = private$.response)
+      if (length(private$.response)) {
+        set(res, j = private$.target_names, value = private$.response)
+      }
       res
     },
 
@@ -125,13 +135,16 @@ DataBackendRaster = R6Class("DataBackendRaster",
       } else if (test_integer(rows, sorted = TRUE, unique = TRUE, len = self$nrow)) {
         # fast
         stack = terra::subset(self$stack, cols)
-        set_names(map(cols, function(layer) {
-          if (terra::is.factor(stack[layer])) {
-            terra::cats(stack[layer])[[1]][, 2]
-          } else {
-            terra::unique(stack["x_1"])[[1]]
-          }
-        }), cols)
+        set_names(
+          map(cols, function(layer) {
+            if (terra::is.factor(stack[[layer]])) {
+              terra::cats(stack[[layer]])[[1]][, 2]
+            } else {
+              terra::unique(stack[[layer]])[[1]]
+            }
+          }),
+          cols
+        )
       } else {
         # slow
         data = self$data(rows, cols)
@@ -139,7 +152,9 @@ DataBackendRaster = R6Class("DataBackendRaster",
         map_if(res, is.factor, as.character)
       }
 
-      if (na_rm) res = map(res, function(values) values[!is.na(values)])
+      if (na_rm) {
+        res = map(res, function(values) values[!is.na(values)])
+      }
       res
     },
 
@@ -213,7 +228,12 @@ DataBackendRaster = R6Class("DataBackendRaster",
     #' Raster stack.
     stack = function(rhs) {
       assert_ro_binding(rhs)
-      stack = terra::rast(private$.data)
+      # reconstruct the stack from the unique sources and select the recorded
+      # bands so that layers reading from a shared multi-band file are not lost
+      sources = unique(private$.sources)
+      nlyrs = map_dbl(sources, function(s) terra::nlyr(terra::rast(s)))
+      offset = c(0, cumsum(nlyrs))[match(private$.sources, sources)]
+      stack = terra::rast(sources)[[offset + private$.bands]]
       iwalk(private$.categories, function(category, n) {
         if (!is.null(category)) {
           terra::set.cats(stack, layer = n, value = category)
@@ -229,6 +249,8 @@ DataBackendRaster = R6Class("DataBackendRaster",
     .calculate_hash = function() {
       mlr3misc::calculate_hash(self$stack)
     },
+    .sources = NULL,
+    .bands = NULL,
     .categories = NULL,
     .layer_names = NULL,
     .crs = NULL
@@ -252,7 +274,8 @@ DataBackendRaster = R6Class("DataBackendRaster",
 #'
 #' @exportS3Method
 #' @export as_data_backend.stars
-as_data_backend.stars = function(data, primary_key = NULL, ...) { # nolint
+#nolint next
+as_data_backend.stars = function(data, primary_key = NULL, ...) {
   require_namespaces("stars")
   data = as(data, "SpatRaster")
   DataBackendRaster$new(data)
@@ -261,14 +284,16 @@ as_data_backend.stars = function(data, primary_key = NULL, ...) { # nolint
 #' @export as_data_backend.SpatRaster
 #' @exportS3Method
 #' @rdname as_data_backend
-as_data_backend.SpatRaster = function(data, primary_key = NULL, ...) { # nolint
+#nolint next
+as_data_backend.SpatRaster = function(data, primary_key = NULL, ...) {
   DataBackendRaster$new(data)
 }
 
 #' @export as_data_backend.RasterBrick
 #' @exportS3Method
 #' @rdname as_data_backend
-as_data_backend.RasterBrick = function(data, primary_key = NULL, ...) { # nolint
+#nolint next
+as_data_backend.RasterBrick = function(data, primary_key = NULL, ...) {
   data = terra::rast(data)
   DataBackendRaster$new(data)
 }
@@ -276,7 +301,8 @@ as_data_backend.RasterBrick = function(data, primary_key = NULL, ...) { # nolint
 #' @export as_data_backend.RasterStack
 #' @exportS3Method
 #' @rdname as_data_backend
-as_data_backend.RasterStack = function(data, primary_key = NULL, ...) { # nolint
+#nolint next
+as_data_backend.RasterStack = function(data, primary_key = NULL, ...) {
   data = terra::rast(data)
   DataBackendRaster$new(data)
 }

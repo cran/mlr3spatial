@@ -63,11 +63,6 @@ likely be removed in a future version of the package. analysis.
 }
 }
 
-\references{
-Becker M, Schratz P (2025).
-\emph{mlr3spatial: Support for Spatial Objects Within the 'mlr3' Ecosystem}.
-R package version 0.6.1, \url{https://mlr3spatial.mlr-org.com}.
-}
 \seealso{
 Useful links:
 \itemize{
@@ -82,6 +77,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Marc Becker \email{marcbecker@posteo.de} (\href{https://orcid.org/0000-0002-8115-0400}{ORCID})
   \item Patrick Schratz \email{patrick.schratz@gmail.com} (\href{https://orcid.org/0000-0003-0748-6624}{ORCID})
 }
 
